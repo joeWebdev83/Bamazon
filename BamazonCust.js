@@ -1,7 +1,9 @@
+//required dependencies
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 var table = require('cli-table2');
 
+//MySQL connection
 var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -62,8 +64,8 @@ function purchaseOrder(ID, amtNeeded){
            var totalCost = res[0].price * amtNeeded;
            console.log("Good news your order is in stock!");
            console.log("Your total cost for " + amtNeeded + " " +res[0].product_name + " is " + totalCost + " Thank you!");
-
-           connection.query("UPDATE products SET stock_quantity = stock_quantity - " + amtNeeded + "WHERE item_id = " + ID);
+           var newStock =  "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?"
+           connection.query(newStock, [amtNeeded, ID]);
        } else{
            console.log("Insufficient quantity, sorry we do not have enough " + res[0].product_name + "to complete your order.");
        };
